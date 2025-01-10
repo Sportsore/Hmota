@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق قياس نسبة الحموضة</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-top: 20px;
+            color: #ffdd57;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        label {
+            font-size: 18px;
+            margin: 15px 0 5px;
+            display: block;
+            color: #fff;
+        }
+
+        select, button {
+            width: 80%;
+            padding: 15px;
+            margin: 10px auto;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: block;
+        }
+
+        select {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            background: linear-gradient(135deg, #ff7eb3, #ff758c);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .result-section {
+            margin-top: 20px;
+        }
+
+        .result-section h2 {
+            font-size: 24px;
+            color: #ffdd57;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .result-section ul li {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            margin: 10px auto;
+            border-radius: 10px;
+            width: 80%;
+            text-align: left;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .stats-container {
+            margin-top: 20px;
+        }
+
+        .stats-container h2 {
+            font-size: 22px;
+            color: #ffdd57;
+        }
+
+        .stats-container ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .stats-container ul li {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            margin: 10px auto;
+            border-radius: 10px;
+            width: 80%;
+        }
+
+        .show-stats-btn {
+            margin-top: 10px;
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+
+        .show-stats-btn:hover {
+            background: linear-gradient(135deg, #38f9d7, #43e97b);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>تطبيق قياس نسبة الحموضة</h1>
+
+    <div id="form-section">
+        <label for="province">اختر محافظتك:</label>
+        <select id="province">
+            <option value="بغداد">بغداد</option>
+            <option value="البصرة">البصرة</option>
+            <option value="ميسان">ميسان</option>
+            <option value="النجف">النجف</option>
+            <option value="كربلاء">كربلاء</option>
+            <option value="نينوى">نينوى</option>
+            <option value="الأنبار">الأنبار</option>
+            <option value="بابل">بابل</option>
+            <option value="ديالى">ديالى</option>
+            <option value="واسط">واسط</option>
+            <option value="ذي قار">ذي قار</option>
+            <option value="المثنى">المثنى</option>
+            <option value="القادسية">القادسية</option>
+            <option value="صلاح الدين">صلاح الدين</option>
+            <option value="كركوك">كركوك</option>
+            <option value="أربيل">أربيل</option>
+            <option value="دهوك">دهوك</option>
+            <option value="السليمانية">السليمانية</option>
+        </select>
+        <label for="gender">الجنس:</label>
+        <select id="gender">
+            <option value="ذكر">ذكر</option>
+            <option value="أنثى">أنثى</option>
+            <option value="متحولة">متحولة</option>
+            <option value="من الحلة">من الحلة</option>
+        </select>
+        <button id="submit-btn">قياس الحموضة</button>
+    </div>
+
+    <div id="result-section" class="hidden">
+        <h2>نتيجتك:</h2>
+        <ul>
+            <li>المحافظة: <span id="user-province"></span></li>
+            <li>الجنس: <span id="user-gender"></span></li>
+            <li>نسبة الحموضة لديك: <span id="user-acidity">0</span>%</li>
+        </ul>
+        <button class="show-stats-btn" id="show-stats-btn">عرض إحصائيات المحافظات</button>
+    </div>
+
+    <div id="stats-section" class="hidden stats-container">
+        <h2>إحصائيات المحافظات:</h2>
+        <ul id="province-stats"></ul>
+    </div>
+
+    <div class="footer">
+        حقوق النشر © 2025 - <a href="https://t.me/caser7" style="color: #ffdd57; text-decoration: none;">telegram:caser7</a>
+    </div>
+
+    <script>
+        const provinces = {
+            بغداد: { votes: 50, acidity: 70 },
+            البصرة: { votes: 30, acidity: 60 },
+            ميسان: { votes: 20, acidity: 50 },
+            النجف: { votes: 40, acidity: 65 },
+            كربلاء: { votes: 25, acidity: 55 },
+            نينوى: { votes: 35, acidity: 58 },
+            الأنبار: { votes: 20, acidity: 45 },
+            بابل: { votes: 28, acidity: 53 },
+            ديالى: { votes: 18, acidity: 48 },
+            واسط: { votes: 22, acidity: 50 },
+            ذي_قار: { votes: 26, acidity: 52 },
+            المثنى: { votes: 14, acidity: 40 },
+            القادسية: { votes: 16, acidity: 42 },
+            صلاح_الدين: { votes: 24, acidity: 51 },
+            كركوك: { votes: 19, acidity: 49 },
+            أربيل: { votes: 30, acidity: 57 },
+            دهوك: { votes: 15, acidity: 43 },
+            السليمانية: { votes: 32, acidity: 59 }
+        };
+
+        document.getElementById("submit-btn").addEventListener("click", () => {
+            const province = document.getElementById("province").value;
+            const gender = document.getElementById("gender").value;
+
+            const randomAcidity = Math.floor(Math.random() * 101);
+
+            document.getElementById("user-province").textContent = province;
+            document.getElementById("user-gender").textContent = gender;
+            document.getElementById("user-acidity").textContent = randomAcidity;
+
+            document.getElementById("form-section").classList.add("hidden");
+            document.getElementById("result-section").classList.remove("hidden");
+        });
+
+        document.getElementById("show-stats-btn").addEventListener("click", () => {
+            const statsList = document.getElementById("province-stats");
+            statsList.innerHTML = "";
+
+            for (const [province, data] of Object.entries(provinces)) {
+                const listItem = document.createElement("li");
+                listItem.textContent = `${province}: نسبة الحموضة ${data.acidity}% - عدد المصوتين: ${data.votes}`;
+                statsList.appendChild(listItem);
+            }
+
+            document.getElementById("stats-section").classList.remove("hidden");
+        });
+    </script>
+</body>
+</html>
